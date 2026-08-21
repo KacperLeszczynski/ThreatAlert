@@ -4,8 +4,9 @@ from dataclasses import dataclass
 from typing import Annotated, TypedDict
 
 from langgraph.graph import END, START, StateGraph
+from langgraph.graph.state import CompiledStateGraph
 
-from threat_alerting.application.aggregation import (
+from threat_alerting.application.assessment.aggregation import (
     ArithmeticMeanAggregator,
     IncompleteEvaluatorPanelError,
 )
@@ -56,6 +57,10 @@ class RiskAssessmentGraph:
             failure_reasons=tuple(state.get("failure_reasons", ())),
         )
 
+    @property
+    def compiled_graph(self) -> CompiledStateGraph:
+        return self._graph
+
     def _build_graph(self, evaluators: dict[str, RiskEvaluator]):
         builder = StateGraph(_AssessmentState)
         node_names = []
@@ -74,7 +79,8 @@ class RiskAssessmentGraph:
     def _evaluator_node(evaluator: RiskEvaluator):
         def evaluate(state: _AssessmentState) -> _AssessmentState:
             try:
-                return {"evaluator_results": [evaluator.evaluate(state["context"])]}
+                context = EvaluationContext.model_validate(state["context"])
+                return {"evaluator_results": [evaluator.evaluate(context)]}
             except Exception as exc:
                 return {"failure_reasons": [f"{evaluator.name}: {type(exc).__name__}: {exc}"]}
 

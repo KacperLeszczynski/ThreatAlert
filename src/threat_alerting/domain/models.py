@@ -58,6 +58,25 @@ class IngestionSummary(DomainContract):
     duplicates_skipped: int = Field(default=0, ge=0)
     malformed_entries: int = Field(default=0, ge=0)
     source_failures: tuple[SourceFailure, ...] = ()
+    created_event_ids: tuple[int, ...] = Field(default=(), exclude=True)
+
+
+class PipelineRunSummary(DomainContract):
+    run_id: NonEmptyText
+    sources_attempted: int = Field(default=0, ge=0)
+    sources_succeeded: int = Field(default=0, ge=0)
+    sources_failed: int = Field(default=0, ge=0)
+    articles_seen: int = Field(default=0, ge=0)
+    articles_new: int = Field(default=0, ge=0)
+    duplicates_skipped: int = Field(default=0, ge=0)
+    malformed_entries: int = Field(default=0, ge=0)
+    assessments_complete: int = Field(default=0, ge=0)
+    assessments_incomplete: int = Field(default=0, ge=0)
+    no_alert_decisions: int = Field(default=0, ge=0)
+    alerts_created: int = Field(default=0, ge=0)
+    alerts_delivered: int = Field(default=0, ge=0)
+    alerts_failed: int = Field(default=0, ge=0)
+    source_failures: tuple[SourceFailure, ...] = ()
 
 
 class NewsArticle(DomainContract):

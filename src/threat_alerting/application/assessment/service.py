@@ -1,6 +1,6 @@
 from collections.abc import Callable, Mapping
 
-from threat_alerting.application.assessment_graph import RiskAssessmentGraph
+from threat_alerting.application.assessment.graph import RiskAssessmentGraph
 from threat_alerting.domain import (
     Assessment,
     AssessmentStatus,

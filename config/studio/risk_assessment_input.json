@@ -1,0 +1,38 @@
+{
+  "context": {
+    "event": {
+      "id": 1,
+      "event_key": "cve:CVE-2026-12345",
+      "event_type": "vulnerability",
+      "cve_id": "CVE-2026-12345",
+      "vendors": ["acme"],
+      "products": ["edge_gateway"],
+      "categories": ["active_exploitation", "rce", "internet_facing"],
+      "first_seen_at": "2026-08-21T08:00:00Z",
+      "last_seen_at": "2026-08-21T08:00:00Z",
+      "corroborating_source_count": 2
+    },
+    "articles": [
+      {
+        "id": 1,
+        "source_name": "stage7-demo",
+        "external_id": "studio-high-risk",
+        "canonical_url": "https://fixture.local/high-risk",
+        "title": "CVE-2026-12345 actively exploited in internet-facing systems",
+        "content": "Attackers are actively exploiting CVE-2026-12345. The vulnerability allows remote code execution without authentication on internet-facing systems.",
+        "content_mode": "full_rss",
+        "content_quality": "full",
+        "published_at": "2026-08-21T08:00:00Z",
+        "fetched_at": "2026-08-21T08:05:00Z",
+        "content_hash": "studio-demo-content-hash",
+        "raw_metadata": {}
+      }
+    ],
+    "source_trust_scores": {
+      "stage7-demo": 0.9
+    }
+  },
+  "evaluator_results": [],
+  "failure_reasons": [],
+  "aggregate_result": null
+}

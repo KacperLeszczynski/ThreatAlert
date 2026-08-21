@@ -7,7 +7,7 @@ import pytest
 from sqlalchemy import Engine, func, select
 
 from threat_alerting.application import ThreatEventCorrelationService
-from threat_alerting.application.correlation import event_identities
+from threat_alerting.application.ingestion.correlation import event_identities
 from threat_alerting.domain import ContentMode, ContentQuality, NewsArticle
 from threat_alerting.infrastructure.db import (
     SessionFactory,

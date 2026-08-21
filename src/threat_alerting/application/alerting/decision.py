@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from decimal import Decimal
 
-from threat_alerting.application.profile_matching import ProfileMatcher
+from threat_alerting.application.alerting.matching import ProfileMatcher
 from threat_alerting.domain import (
     Alert,
     AlertDecisionOutcome,

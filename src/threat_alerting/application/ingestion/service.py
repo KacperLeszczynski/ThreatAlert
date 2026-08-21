@@ -3,7 +3,10 @@ from uuid import uuid4
 
 from pydantic import ValidationError
 
-from threat_alerting.application.normalization import ArticleNormalizer, MalformedArticleError
+from threat_alerting.application.ingestion.normalization import (
+    ArticleNormalizer,
+    MalformedArticleError,
+)
 from threat_alerting.domain.models import IngestionSummary, SourceFailure
 from threat_alerting.domain.ports import ArticleCorrelator, IngestionUnitOfWork, NewsSource
 
@@ -31,6 +34,7 @@ class IngestionService:
         duplicates_skipped = 0
         malformed_entries = 0
         source_failures: list[SourceFailure] = []
+        created_event_ids: set[int] = set()
 
         for source in self._sources:
             try:
@@ -62,7 +66,13 @@ class IngestionService:
                     if created:
                         articles_new += 1
                         if self._article_correlator is not None:
-                            self._article_correlator.correlate(stored_article, unit_of_work)
+                            events = self._article_correlator.correlate(
+                                stored_article,
+                                unit_of_work,
+                            )
+                            created_event_ids.update(
+                                event.id for event in events if event.id is not None
+                            )
                     else:
                         duplicates_skipped += 1
                 unit_of_work.commit()
@@ -77,4 +87,5 @@ class IngestionService:
             duplicates_skipped=duplicates_skipped,
             malformed_entries=malformed_entries,
             source_failures=tuple(source_failures),
+            created_event_ids=tuple(sorted(created_event_ids)),
         )

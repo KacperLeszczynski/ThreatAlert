@@ -3,7 +3,7 @@ from pathlib import Path
 import httpx
 import pytest
 
-from threat_alerting.application.normalization import ArticleNormalizer
+from threat_alerting.application.ingestion.normalization import ArticleNormalizer
 from threat_alerting.domain import ContentMode, ContentQuality, SourceDefinition
 from threat_alerting.infrastructure.rss import (
     FixtureFeedTransport,
