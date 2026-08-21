@@ -1,0 +1,21 @@
+sources:
+  - name: sans-isc
+    url: https://isc.sans.edu/rssfeed_full.xml
+    content_mode: full_rss
+    trust_score: 0.9
+    enabled: true
+  - name: krebs-on-security
+    url: https://krebsonsecurity.com/feed/
+    content_mode: full_rss
+    trust_score: 0.85
+    enabled: true
+  - name: security-week
+    url: https://feeds.feedburner.com/securityweek
+    content_mode: summary_only
+    trust_score: 0.8
+    enabled: true
+  - name: bleeping-computer
+    url: https://www.bleepingcomputer.com/feed/
+    content_mode: summary_only
+    trust_score: 0.8
+    enabled: true

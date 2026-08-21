@@ -13,6 +13,11 @@ class AlertStatus(StrEnum):
     FAILED = "failed"
 
 
+class AlertDecisionOutcome(StrEnum):
+    ALERT = "alert"
+    NO_ALERT = "no_alert"
+
+
 class DeliveryStatus(StrEnum):
     PENDING = "pending"
     SENT = "sent"

@@ -1,4 +1,5 @@
 from collections.abc import Callable
+from datetime import UTC, datetime
 from typing import TypeVar
 
 from sqlalchemy import select
@@ -64,6 +65,18 @@ class NewsArticleRepository:
         row, created = _insert_or_find(self._session, _article_to_row(article), find_existing)
         return _article_from_row(row), created
 
+    def list_for_event(self, event_id: int) -> list[NewsArticle]:
+        rows = self._session.scalars(
+            select(NewsArticleRow)
+            .join(
+                ThreatEventArticleRow,
+                ThreatEventArticleRow.article_id == NewsArticleRow.id,
+            )
+            .where(ThreatEventArticleRow.event_id == event_id)
+            .order_by(NewsArticleRow.id)
+        )
+        return [_article_from_row(row) for row in rows]
+
     def _find_by_identity(self, article: NewsArticle) -> NewsArticleRow | None:
         if article.external_id is not None:
             row = self._session.scalar(
@@ -92,6 +105,12 @@ class ThreatEventRepository:
         row = self._session.get(ThreatEventRow, event_id)
         return _event_from_row(row) if row else None
 
+    def get_by_key(self, event_key: str) -> ThreatEvent | None:
+        row = self._session.scalar(
+            select(ThreatEventRow).where(ThreatEventRow.event_key == event_key)
+        )
+        return _event_from_row(row) if row else None
+
     def add_or_get(self, event: ThreatEvent) -> tuple[ThreatEvent, bool]:
         def find_existing() -> ThreatEventRow | None:
             return self._session.scalar(
@@ -117,6 +136,24 @@ class ThreatEventRepository:
         _, created = _insert_or_find(self._session, row, lambda: self._session.scalar(query))
         return created
 
+    def update(self, event: ThreatEvent) -> ThreatEvent:
+        if event.id is None:
+            raise ValueError("persisted threat event requires an id")
+        row = self._session.get(ThreatEventRow, event.id)
+        if row is None:
+            raise LookupError(f"threat event {event.id} does not exist")
+
+        row.event_type = event.event_type
+        row.cve_id = event.cve_id
+        row.vendors = list(event.vendors)
+        row.products = list(event.products)
+        row.categories = list(event.categories)
+        row.first_seen_at = event.first_seen_at
+        row.last_seen_at = event.last_seen_at
+        row.corroborating_source_count = event.corroborating_source_count
+        self._session.flush()
+        return _event_from_row(row)
+
 
 class AssessmentRepository:
     def __init__(self, session: Session) -> None:
@@ -124,6 +161,19 @@ class AssessmentRepository:
 
     def get(self, assessment_id: int) -> Assessment | None:
         row = self._session.get(AssessmentRow, assessment_id)
+        return _assessment_from_row(row) if row else None
+
+    def get_by_event_version(
+        self,
+        event_id: int,
+        assessment_version: str,
+    ) -> Assessment | None:
+        row = self._session.scalar(
+            select(AssessmentRow).where(
+                AssessmentRow.event_id == event_id,
+                AssessmentRow.assessment_version == assessment_version,
+            )
+        )
         return _assessment_from_row(row) if row else None
 
     def add_or_get(self, assessment: Assessment) -> tuple[Assessment, bool]:
@@ -157,6 +207,27 @@ class ClientProfileRepository:
         self._session.flush()
         return _profile_from_row(row)
 
+    def update(self, profile: ClientProfile) -> ClientProfile:
+        if profile.id is None:
+            raise ValueError("persisted client profile requires an id")
+        row = self._session.get(ClientProfileRow, profile.id)
+        if row is None:
+            raise LookupError(f"client profile {profile.id} does not exist")
+
+        row.name = profile.name
+        row.minimum_score = profile.minimum_score
+        row.vendors = list(profile.vendors)
+        row.products = list(profile.products)
+        row.categories = list(profile.categories)
+        row.enabled = profile.enabled
+        row.updated_at = profile.updated_at
+        self._session.flush()
+        return _profile_from_row(row)
+
+    def list_all(self) -> list[ClientProfile]:
+        rows = self._session.scalars(select(ClientProfileRow).order_by(ClientProfileRow.id))
+        return [_profile_from_row(row) for row in rows]
+
     def list_enabled(self) -> list[ClientProfile]:
         rows = self._session.scalars(
             select(ClientProfileRow)
@@ -174,6 +245,15 @@ class AlertRepository:
         row = self._session.get(AlertRow, alert_id)
         return _alert_from_row(row) if row else None
 
+    def get_for_profile_assessment(self, profile_id: int, assessment_id: int) -> Alert | None:
+        row = self._session.scalar(
+            select(AlertRow).where(
+                AlertRow.profile_id == profile_id,
+                AlertRow.assessment_id == assessment_id,
+            )
+        )
+        return _alert_from_row(row) if row else None
+
     def add_or_get(self, alert: Alert) -> tuple[Alert, bool]:
         def find_existing() -> AlertRow | None:
             return self._session.scalar(
@@ -189,6 +269,18 @@ class AlertRepository:
 
         row, created = _insert_or_find(self._session, _alert_to_row(alert), find_existing)
         return _alert_from_row(row), created
+
+    def update(self, alert: Alert) -> Alert:
+        if alert.id is None:
+            raise ValueError("persisted alert requires an id")
+        row = self._session.get(AlertRow, alert.id)
+        if row is None:
+            raise LookupError(f"alert {alert.id} does not exist")
+
+        row.status = alert.status
+        row.updated_at = alert.updated_at
+        self._session.flush()
+        return _alert_from_row(row)
 
 
 class AlertDeliveryRepository:
@@ -224,6 +316,20 @@ class AlertDeliveryRepository:
         )
         return _delivery_from_row(row) if row else None
 
+    def update(self, delivery: AlertDelivery) -> AlertDelivery:
+        if delivery.id is None:
+            raise ValueError("persisted alert delivery requires an id")
+        row = self._session.get(AlertDeliveryRow, delivery.id)
+        if row is None:
+            raise LookupError(f"alert delivery {delivery.id} does not exist")
+
+        row.status = delivery.status
+        row.attempt_count = delivery.attempt_count
+        row.last_error = delivery.last_error
+        row.sent_at = delivery.sent_at
+        self._session.flush()
+        return _delivery_from_row(row)
+
 
 def _article_to_row(article: NewsArticle) -> NewsArticleRow:
     return NewsArticleRow(
@@ -251,8 +357,8 @@ def _article_from_row(row: NewsArticleRow) -> NewsArticle:
         content=row.content,
         content_mode=row.content_mode,
         content_quality=row.content_quality,
-        published_at=row.published_at,
-        fetched_at=row.fetched_at,
+        published_at=_as_utc(row.published_at),
+        fetched_at=_as_utc(row.fetched_at),
         content_hash=row.content_hash,
         raw_metadata=row.raw_metadata,
     )
@@ -281,8 +387,8 @@ def _event_from_row(row: ThreatEventRow) -> ThreatEvent:
         vendors=tuple(row.vendors),
         products=tuple(row.products),
         categories=tuple(row.categories),
-        first_seen_at=row.first_seen_at,
-        last_seen_at=row.last_seen_at,
+        first_seen_at=_as_utc(row.first_seen_at),
+        last_seen_at=_as_utc(row.last_seen_at),
         corroborating_source_count=row.corroborating_source_count,
     )
 
@@ -320,7 +426,7 @@ def _assessment_from_row(row: AssessmentRow) -> Assessment:
         model_metadata=row.model_metadata,
         prompt_versions=row.prompt_versions,
         failure_reasons=tuple(row.failure_reasons),
-        created_at=row.created_at,
+        created_at=_as_utc(row.created_at),
     )
 
 
@@ -346,8 +452,8 @@ def _profile_from_row(row: ClientProfileRow) -> ClientProfile:
         products=tuple(row.products),
         categories=tuple(row.categories),
         enabled=row.enabled,
-        created_at=row.created_at,
-        updated_at=row.updated_at,
+        created_at=_as_utc(row.created_at),
+        updated_at=_as_utc(row.updated_at),
     )
 
 
@@ -383,8 +489,8 @@ def _alert_from_row(row: AlertRow) -> Alert:
         needs_review=row.needs_review,
         decision_certificate=row.decision_certificate,
         status=row.status,
-        created_at=row.created_at,
-        updated_at=row.updated_at,
+        created_at=_as_utc(row.created_at),
+        updated_at=_as_utc(row.updated_at),
     )
 
 
@@ -408,6 +514,14 @@ def _delivery_from_row(row: AlertDeliveryRow) -> AlertDelivery:
         status=row.status,
         attempt_count=row.attempt_count,
         last_error=row.last_error,
-        created_at=row.created_at,
-        sent_at=row.sent_at,
+        created_at=_as_utc(row.created_at),
+        sent_at=_as_utc(row.sent_at),
     )
+
+
+def _as_utc(value: datetime | None) -> datetime | None:
+    if value is None:
+        return None
+    if value.tzinfo is None:
+        return value.replace(tzinfo=UTC)
+    return value.astimezone(UTC)

@@ -15,15 +15,28 @@ class EvidenceItem(DomainContract):
     verified: bool = False
 
 
+class LLMEvidenceQuote(DomainContract):
+    quote: NonEmptyText
+
+
+class StructuredLLMResult(DomainContract):
+    score: UnitScore
+    confidence: UnitScore
+    reasons: tuple[NonEmptyText, ...]
+    evidence: tuple[LLMEvidenceQuote, ...]
+
+
 class RiskResult(DomainContract):
     evaluator: NonEmptyText
     score: UnitScore
     confidence: UnitScore
     reasons: tuple[NonEmptyText, ...] = ()
     evidence: tuple[EvidenceItem, ...] = ()
+    provider: NonEmptyText | None = None
     model: NonEmptyText | None = None
     prompt_version: NonEmptyText | None = None
     duration_ms: int = Field(default=0, ge=0)
+    attempt_count: int = Field(default=1, ge=1)
 
 
 class AggregateResult(DomainContract):

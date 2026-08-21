@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Krebs on Security</title>
+    <link>https://krebsonsecurity.com/</link>
+    <item>
+      <guid isPermaLink="false">https://krebsonsecurity.com/?p=4242</guid>
+      <title>Inside a payment phishing campaign</title>
+      <link>https://krebsonsecurity.com/2026/08/payment-phishing/?fbclid=tracking</link>
+      <pubDate>Tue, 18 Aug 2026 08:15:00 +0000</pubDate>
+      <content:encoded><![CDATA[
+        <div><p>The campaign targeted payment teams with convincing login pages.</p></div>
+      ]]></content:encoded>
+    </item>
+  </channel>
+</rss>

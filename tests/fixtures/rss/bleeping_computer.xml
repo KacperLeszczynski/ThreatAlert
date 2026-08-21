@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>BleepingComputer</title>
+    <link>https://www.bleepingcomputer.com/</link>
+    <item>
+      <guid isPermaLink="false">bc-2026-ransomware-9</guid>
+      <title>New ransomware operation targets retailers</title>
+      <link>https://www.bleepingcomputer.com/news/security/ransomware-retail/?gclid=ignored</link>
+      <pubDate>Sun, 16 Aug 2026 20:45:00 GMT</pubDate>
+      <description><![CDATA[
+        <p>A new operation is sending malicious archives to retail employees.</p>
+      ]]></description>
+    </item>
+  </channel>
+</rss>

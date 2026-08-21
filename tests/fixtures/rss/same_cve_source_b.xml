@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Source B</title>
+    <item>
+      <guid>source-b-cve-2026-54321</guid>
+      <title>Researchers confirm cve-2026-54321 attacks</title>
+      <link>https://source-b.example.test/advisory/54321</link>
+      <pubDate>Thu, 20 Aug 2026 09:00:00 GMT</pubDate>
+      <description><![CDATA[
+        <p>Researchers confirmed exploitation of CVE-2026-54321 in the wild.</p>
+      ]]></description>
+    </item>
+  </channel>
+</rss>

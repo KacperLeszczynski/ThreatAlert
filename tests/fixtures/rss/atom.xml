@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Security Research Atom</title>
+  <link href="https://research.example.test/" />
+  <updated>2026-08-20T09:00:00Z</updated>
+  <entry>
+    <title>Atom advisory published</title>
+    <id>urn:uuid:atom-advisory-1</id>
+    <link href="https://research.example.test/advisories/1?utm_campaign=atom#impact" />
+    <updated>2026-08-20T08:30:00Z</updated>
+    <summary type="html">&lt;p&gt;An advisory with &lt;strong&gt;technical details&lt;/strong&gt;.&lt;/p&gt;</summary>
+  </entry>
+</feed>

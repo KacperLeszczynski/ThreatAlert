@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Mixed Fixture</title>
+    <item>
+      <guid>good-entry-1</guid>
+      <title>Valid security bulletin</title>
+      <link>https://fixture.example.test/good</link>
+      <description><![CDATA[<p>A valid summary for offline ingestion.</p>]]></description>
+    </item>
+    <item>
+      <guid>missing-content</guid>
+      <title>Malformed because content is absent</title>
+      <link>https://fixture.example.test/malformed</link>
+    </item>
+  </channel>
+</rss>

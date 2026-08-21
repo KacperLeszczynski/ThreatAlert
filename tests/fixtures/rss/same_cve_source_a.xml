@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Source A</title>
+    <item>
+      <guid>source-a-cve-2026-54321</guid>
+      <title>CVE-2026-54321 exploited against gateways</title>
+      <link>https://source-a.example.test/cve-2026-54321</link>
+      <pubDate>Wed, 19 Aug 2026 10:00:00 GMT</pubDate>
+      <content:encoded><![CDATA[
+        <p>CVE-2026-54321 is actively exploited against internet-facing gateways.</p>
+        <p>The flaw allows remote code execution.</p>
+      ]]></content:encoded>
+    </item>
+  </channel>
+</rss>
