@@ -6,7 +6,7 @@ from time import perf_counter
 
 from pydantic import ValidationError
 
-from threat_alerting.application.evidence import validate_evidence
+from threat_alerting.application.assessment.evidence import validate_evidence
 from threat_alerting.domain import (
     ContentQuality,
     EvaluationContext,

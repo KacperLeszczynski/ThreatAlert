@@ -1,6 +1,6 @@
 from datetime import UTC, datetime
 
-from threat_alerting.application.normalization import (
+from threat_alerting.application.ingestion.normalization import (
     ArticleNormalizer,
     canonicalize_url,
     content_hash,

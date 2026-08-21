@@ -1,0 +1,7 @@
+{
+  "dependencies": ["."],
+  "graphs": {
+    "risk-assessment": "./src/threat_alerting/studio.py:graph"
+  },
+   "env": ".env"
+}

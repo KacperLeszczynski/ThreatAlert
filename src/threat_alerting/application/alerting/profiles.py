@@ -1,7 +1,7 @@
 from collections.abc import Callable
 from datetime import UTC, datetime
 
-from threat_alerting.application.profile_matching import normalize_filters
+from threat_alerting.application.alerting.matching import normalize_filters
 from threat_alerting.domain import ClientProfile, ClientProfileCreate, ClientProfileUpdate
 from threat_alerting.domain.ports import AlertUnitOfWork
 
@@ -64,11 +64,19 @@ class ClientProfileService:
             unit_of_work.commit()
         return stored
 
-    def list(self, *, enabled_only: bool = False) -> tuple[ClientProfile, ...]:
+    def list(
+        self,
+        *,
+        enabled_only: bool = False,
+        limit: int | None = None,
+        offset: int = 0,
+    ) -> tuple[ClientProfile, ...]:
         with self._unit_of_work_factory() as unit_of_work:
             profiles = (
                 unit_of_work.client_profiles.list_enabled()
                 if enabled_only
-                else unit_of_work.client_profiles.list_all()
+                else unit_of_work.client_profiles.list_all(limit=limit, offset=offset)
             )
+        if enabled_only and (offset or limit is not None):
+            profiles = profiles[offset : offset + limit if limit is not None else None]
         return tuple(profiles)

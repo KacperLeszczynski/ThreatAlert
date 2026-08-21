@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Offline Stage 7 Demo</title>
+    <link>https://fixture.local/</link>
+    <description>Representative local security feed</description>
+    <item>
+      <guid>stage7-high-risk</guid>
+      <title>CVE-2026-12345 actively exploited in internet-facing systems</title>
+      <link>https://fixture.local/high-risk?utm_source=demo</link>
+      <pubDate>Fri, 21 Aug 2026 08:00:00 GMT</pubDate>
+      <description><![CDATA[
+        Attackers are actively exploiting CVE-2026-12345. The vulnerability allows
+        remote code execution without authentication on internet-facing systems.
+      ]]></description>
+    </item>
+    <item>
+      <guid>stage7-low-risk</guid>
+      <title>Routine security product maintenance announced</title>
+      <link>https://fixture.local/maintenance</link>
+      <pubDate>Fri, 21 Aug 2026 07:00:00 GMT</pubDate>
+      <description><![CDATA[
+        A routine maintenance release improves diagnostics. No evidence of exploitation
+        has been observed and no immediate customer action is required.
+      ]]></description>
+    </item>
+  </channel>
+</rss>

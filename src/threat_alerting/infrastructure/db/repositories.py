@@ -77,6 +77,12 @@ class NewsArticleRepository:
         )
         return [_article_from_row(row) for row in rows]
 
+    def list(self, *, limit: int, offset: int) -> list[NewsArticle]:
+        rows = self._session.scalars(
+            select(NewsArticleRow).order_by(NewsArticleRow.id.desc()).limit(limit).offset(offset)
+        )
+        return [_article_from_row(row) for row in rows]
+
     def _find_by_identity(self, article: NewsArticle) -> NewsArticleRow | None:
         if article.external_id is not None:
             row = self._session.scalar(
@@ -192,6 +198,12 @@ class AssessmentRepository:
         row, created = _insert_or_find(self._session, _assessment_to_row(assessment), find_existing)
         return _assessment_from_row(row), created
 
+    def list(self, *, limit: int, offset: int) -> list[Assessment]:
+        rows = self._session.scalars(
+            select(AssessmentRow).order_by(AssessmentRow.id.desc()).limit(limit).offset(offset)
+        )
+        return [_assessment_from_row(row) for row in rows]
+
 
 class ClientProfileRepository:
     def __init__(self, session: Session) -> None:
@@ -224,8 +236,16 @@ class ClientProfileRepository:
         self._session.flush()
         return _profile_from_row(row)
 
-    def list_all(self) -> list[ClientProfile]:
-        rows = self._session.scalars(select(ClientProfileRow).order_by(ClientProfileRow.id))
+    def list_all(
+        self,
+        *,
+        limit: int | None = None,
+        offset: int = 0,
+    ) -> list[ClientProfile]:
+        query = select(ClientProfileRow).order_by(ClientProfileRow.id).offset(offset)
+        if limit is not None:
+            query = query.limit(limit)
+        rows = self._session.scalars(query)
         return [_profile_from_row(row) for row in rows]
 
     def list_enabled(self) -> list[ClientProfile]:
@@ -281,6 +301,19 @@ class AlertRepository:
         row.updated_at = alert.updated_at
         self._session.flush()
         return _alert_from_row(row)
+
+    def list(
+        self,
+        *,
+        limit: int,
+        offset: int,
+        profile_id: int | None = None,
+    ) -> list[Alert]:
+        query = select(AlertRow)
+        if profile_id is not None:
+            query = query.where(AlertRow.profile_id == profile_id)
+        rows = self._session.scalars(query.order_by(AlertRow.id.desc()).limit(limit).offset(offset))
+        return [_alert_from_row(row) for row in rows]
 
 
 class AlertDeliveryRepository:

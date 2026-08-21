@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from threat_alerting.application.llm_experts import ImpactExpert, UrgencyExpert
+from threat_alerting.application.assessment.experts import ImpactExpert, UrgencyExpert
 from threat_alerting.domain import (
     ContentMode,
     ContentQuality,
