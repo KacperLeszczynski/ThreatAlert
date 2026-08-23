@@ -19,17 +19,12 @@ class IngestionService:
         normalizer: ArticleNormalizer,
         *,
         article_correlator: ArticleCorrelator | None = None,
-        max_cves_for_immediate_assessment: int = 10,
         run_id_factory: Callable[[], str] = lambda: str(uuid4()),
     ) -> None:
-        if max_cves_for_immediate_assessment < 1:
-            raise ValueError("max_cves_for_immediate_assessment must be positive")
-
         self._sources = tuple(sources)
         self._unit_of_work_factory = unit_of_work_factory
         self._normalizer = normalizer
         self._article_correlator = article_correlator
-        self._max_cves_for_immediate_assessment = max_cves_for_immediate_assessment
         self._run_id_factory = run_id_factory
 
     def run(self) -> IngestionSummary:
@@ -40,8 +35,6 @@ class IngestionService:
         malformed_entries = 0
         source_failures: list[SourceFailure] = []
         created_event_ids: set[int] = set()
-        assessment_candidate_ids: set[int] = set()
-        deferred_event_ids: set[int] = set()
 
         for source in self._sources:
             try:
@@ -77,19 +70,12 @@ class IngestionService:
                                 stored_article,
                                 unit_of_work,
                             )
-                            event_ids = tuple(event.id for event in events if event.id is not None)
-                            created_event_ids.update(event_ids)
-                            assessment_candidate_ids.update(
-                                event_ids[: self._max_cves_for_immediate_assessment]
-                            )
-                            deferred_event_ids.update(
-                                event_ids[self._max_cves_for_immediate_assessment :]
+                            created_event_ids.update(
+                                event.id for event in events if event.id is not None
                             )
                     else:
                         duplicates_skipped += 1
                 unit_of_work.commit()
-
-        deferred_event_ids.difference_update(assessment_candidate_ids)
 
         return IngestionSummary(
             run_id=self._run_id_factory(),
@@ -100,10 +86,6 @@ class IngestionService:
             articles_new=articles_new,
             duplicates_skipped=duplicates_skipped,
             malformed_entries=malformed_entries,
-            events_created=len(created_event_ids),
-            events_deferred=len(deferred_event_ids),
             source_failures=tuple(source_failures),
             created_event_ids=tuple(sorted(created_event_ids)),
-            assessment_candidate_ids=tuple(sorted(assessment_candidate_ids)),
-            deferred_event_ids=tuple(sorted(deferred_event_ids)),
         )

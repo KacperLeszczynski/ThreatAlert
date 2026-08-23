@@ -247,7 +247,7 @@ class EvaluationRunner:
                     {
                         event_id
                         for summary in ingestion_summaries
-                        for event_id in summary.assessment_candidate_ids
+                        for event_id in summary.created_event_ids
                     }
                 )
             )

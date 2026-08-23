@@ -57,12 +57,8 @@ class IngestionSummary(DomainContract):
     articles_new: int = Field(default=0, ge=0)
     duplicates_skipped: int = Field(default=0, ge=0)
     malformed_entries: int = Field(default=0, ge=0)
-    events_created: int = Field(default=0, ge=0)
-    events_deferred: int = Field(default=0, ge=0)
     source_failures: tuple[SourceFailure, ...] = ()
     created_event_ids: tuple[int, ...] = Field(default=(), exclude=True)
-    assessment_candidate_ids: tuple[int, ...] = Field(default=(), exclude=True)
-    deferred_event_ids: tuple[int, ...] = Field(default=(), exclude=True)
 
 
 class PipelineRunSummary(DomainContract):
@@ -74,8 +70,6 @@ class PipelineRunSummary(DomainContract):
     articles_new: int = Field(default=0, ge=0)
     duplicates_skipped: int = Field(default=0, ge=0)
     malformed_entries: int = Field(default=0, ge=0)
-    events_created: int = Field(default=0, ge=0)
-    events_deferred: int = Field(default=0, ge=0)
     assessments_complete: int = Field(default=0, ge=0)
     assessments_incomplete: int = Field(default=0, ge=0)
     no_alert_decisions: int = Field(default=0, ge=0)

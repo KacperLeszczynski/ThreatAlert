@@ -11,7 +11,6 @@ def test_settings_have_safe_defaults_without_secrets() -> None:
     assert settings.rss_timeout_seconds == 10.0
     assert settings.rss_max_attempts == 3
     assert settings.max_articles_per_source == 10
-    assert settings.max_cves_for_immediate_assessment == 10
     assert settings.article_max_characters == 12_000
     assert settings.llm_provider == "fake"
     assert settings.llm_api_key is None
@@ -34,7 +33,6 @@ def test_settings_read_environment_variables(monkeypatch) -> None:
     monkeypatch.setenv("DATABASE_URL", "sqlite+pysqlite:///:memory:")
     monkeypatch.setenv("RSS_MAX_ATTEMPTS", "2")
     monkeypatch.setenv("MAX_ARTICLES_PER_SOURCE", "5")
-    monkeypatch.setenv("MAX_CVES_FOR_IMMEDIATE_ASSESSMENT", "7")
     monkeypatch.setenv("LLM_PROVIDER", "openai")
     monkeypatch.setenv("LLM_MODEL", "configured-model")
     monkeypatch.setenv("LLM_API_KEY", "test-secret")
@@ -47,7 +45,6 @@ def test_settings_read_environment_variables(monkeypatch) -> None:
     assert settings.database_url == "sqlite+pysqlite:///:memory:"
     assert settings.rss_max_attempts == 2
     assert settings.max_articles_per_source == 5
-    assert settings.max_cves_for_immediate_assessment == 7
     assert settings.llm_provider == "openai"
     assert settings.llm_model == "configured-model"
     assert settings.llm_api_key is not None
