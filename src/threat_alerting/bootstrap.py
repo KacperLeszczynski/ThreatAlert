@@ -176,6 +176,7 @@ def _build_ingestion_factory(
             unit_of_work_factory,
             normalizer,
             article_correlator=correlator,
+            max_cves_for_immediate_assessment=settings.max_cves_for_immediate_assessment,
             run_id_factory=lambda: run_id,
         )
 

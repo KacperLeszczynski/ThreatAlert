@@ -58,7 +58,7 @@ class PipelineRunService:
         alerts_failed = 0
         profiles = self._profile_service.list(enabled_only=True)
 
-        for event_id in ingestion.created_event_ids:
+        for event_id in ingestion.assessment_candidate_ids:
             assessment = self._assessment_service.assess(event_id)
             if assessment.status is not AssessmentStatus.COMPLETE:
                 incomplete += 1
@@ -104,6 +104,8 @@ class PipelineRunService:
             articles_new=ingestion.articles_new,
             duplicates_skipped=ingestion.duplicates_skipped,
             malformed_entries=ingestion.malformed_entries,
+            events_created=ingestion.events_created,
+            events_deferred=ingestion.events_deferred,
             assessments_complete=complete,
             assessments_incomplete=incomplete,
             no_alert_decisions=no_alert_decisions,

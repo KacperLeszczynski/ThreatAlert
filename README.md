@@ -31,6 +31,14 @@ When no CVE exists, the canonical URL is used as a deterministic fallback. The
 article ID is the final fallback. Correlation intentionally avoids fuzzy or
 embedding-based matching, so every merge can be explained.
 
+Correlation always persists every extracted CVE event. To bound evaluator and LLM
+cost, each new article contributes at most
+`MAX_CVES_FOR_IMMEDIATE_ASSESSMENT` events to the current assessment run. Remaining
+events are reported as deferred and can be promoted by a later focused article. This
+is a bounded immediate-assessment budget, not risk-based prioritization.
+The current synchronous P0 has no background deferred-event worker; unassessed events
+remain queryable in SQLite until a later run promotes them or a future worker processes them.
+
 ### Risk assessment
 
 LangGraph fans an event out to three evaluators:
@@ -355,6 +363,7 @@ environment.
 | `DATABASE_URL` | `sqlite+pysqlite:///./data/threat_alerting.db` | One physical application database |
 | `SOURCES_CONFIG_PATH` | `config/sources.yaml` | Trusted RSS source configuration |
 | `MAX_ARTICLES_PER_SOURCE` | `10` | Bound on entries processed per source and run |
+| `MAX_CVES_FOR_IMMEDIATE_ASSESSMENT` | `10` | Per-article budget for immediate assessment; all CVEs are still persisted |
 | `LLM_PROVIDER` | `fake` | `fake` or `openai` |
 | `LLM_MODEL` | `gpt-5-mini` | Real provider model |
 | `LLM_API_KEY` | empty | Required only when `LLM_PROVIDER=openai` |

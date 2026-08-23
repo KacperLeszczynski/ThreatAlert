@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     rss_max_attempts: int = Field(default=3, ge=1, le=5)
     rss_backoff_base_seconds: float = Field(default=0.5, gt=0.0, le=10.0)
     max_articles_per_source: int = Field(default=10, ge=1, le=100)
+    max_cves_for_immediate_assessment: int = Field(default=10, ge=1, le=100)
     article_max_characters: int = Field(default=12_000, ge=1_000, le=100_000)
     llm_provider: Literal["fake", "openai"] = "fake"
     llm_model: str = Field(default="gpt-5-mini", min_length=1)

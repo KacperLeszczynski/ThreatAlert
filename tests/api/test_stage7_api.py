@@ -122,6 +122,8 @@ def test_fixture_ingestion_runs_end_to_end_and_is_idempotent(client: ApiClient) 
         "articles_new": 2,
         "duplicates_skipped": 0,
         "malformed_entries": 0,
+        "events_created": 2,
+        "events_deferred": 0,
         "assessments_complete": 2,
         "assessments_incomplete": 0,
         "no_alert_decisions": 3,
