@@ -99,6 +99,19 @@ uv run python -m threat_alerting.cli ingest --fixture mixed-news
 
 This second run is the quickest manual check of article idempotency.
 
+### Create a fresh database
+
+Create a separate SQLite database with the current schema by passing a name with or
+without the `.db` extension:
+
+```powershell
+uv run python scripts/create_database.py acknowledgement-test
+```
+
+The database is created under `data/` and the command prints the `DATABASE_URL` and
+PowerShell environment assignment needed to run the application against it. Existing
+database files are never overwritten.
+
 ## Running the API
 
 ```powershell
