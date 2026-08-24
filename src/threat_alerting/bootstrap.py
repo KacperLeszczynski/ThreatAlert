@@ -42,11 +42,11 @@ from threat_alerting.observability import configure_application_logging
 from threat_alerting.settings import Settings, get_settings
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-FIXTURE_URL = "https://fixture.local/stage7-demo.xml"
-FIXTURE_PATH = PROJECT_ROOT / "config" / "fixtures" / "stage7_demo.xml"
+FIXTURE_URL = "https://fixture.local/demo.xml"
+FIXTURE_PATH = PROJECT_ROOT / "config" / "fixtures" / "demo.xml"
 FIXTURE_NAME = "mixed-news"
 FIXTURE_SOURCE = SourceDefinition(
-    name="stage7-demo",
+    name="demo",
     url=FIXTURE_URL,
     content_mode=ContentMode.FULL_RSS,
     trust_score=0.90,

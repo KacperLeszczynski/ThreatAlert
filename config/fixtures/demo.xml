@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>Offline Stage 7 Demo</title>
+    <title>Offline Demo</title>
     <link>https://fixture.local/</link>
     <description>Representative local security feed</description>
     <item>
-      <guid>stage7-high-risk</guid>
+      <guid>demo-high-risk</guid>
       <title>CVE-2026-12345 actively exploited in internet-facing systems</title>
       <link>https://fixture.local/high-risk?utm_source=demo</link>
       <pubDate>Fri, 21 Aug 2026 08:00:00 GMT</pubDate>
@@ -15,7 +15,7 @@
       ]]></description>
     </item>
     <item>
-      <guid>stage7-low-risk</guid>
+      <guid>demo-low-risk</guid>
       <title>Routine security product maintenance announced</title>
       <link>https://fixture.local/maintenance</link>
       <pubDate>Fri, 21 Aug 2026 07:00:00 GMT</pubDate>

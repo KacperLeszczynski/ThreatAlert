@@ -15,7 +15,7 @@
     "articles": [
       {
         "id": 1,
-        "source_name": "stage7-demo",
+        "source_name": "demo",
         "external_id": "studio-high-risk",
         "canonical_url": "https://fixture.local/high-risk",
         "title": "CVE-2026-12345 actively exploited in internet-facing systems",
@@ -29,7 +29,7 @@
       }
     ],
     "source_trust_scores": {
-      "stage7-demo": 0.9
+      "demo": 0.9
     }
   },
   "evaluator_results": [],

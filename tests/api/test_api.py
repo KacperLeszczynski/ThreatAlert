@@ -43,7 +43,7 @@ class ApiClient:
 
 @pytest.fixture
 def container(tmp_path) -> Iterator[ApplicationContainer]:
-    database_path = tmp_path / "stage7.db"
+    database_path = tmp_path / "demo.db"
     settings = Settings(
         _env_file=None,
         app_env="test",
